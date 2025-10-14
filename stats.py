@@ -141,5 +141,5 @@ def select_best_days(csv_path, top_n=10):
         print(f"{k:<15}: {v}")
 
 if __name__ == "__main__":
-    base = os.path.join(os.path.dirname(__file__), 'dataset', 'archive', 'day.csv')
+    base = os.path.join(os.path.dirname(__file__), 'dataset', 'day.csv')
     select_best_days(base, top_n=10)
