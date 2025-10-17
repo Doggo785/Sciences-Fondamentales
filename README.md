@@ -40,6 +40,4 @@ Les jeux de données sont disponibles dans le dossier `dataset`.
 
 ---
 
----
-
 *Projet pédagogique pour le bloc Science Fondamentale et l'analyse avancée de données système.*
