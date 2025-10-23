@@ -1,21 +1,9 @@
-"""
- Matrice d’adjacence (graphe non orienté)
-     (0 0 1 1 1 0 0)
-     (0 0 1 1 0 0 0)
-     (1 1 0 0 0 1 0)
- M = (1 1 0 0 1 0 0)
-     (0 0 0 0 0 1 0)
-     (1 0 1 1 1 0 0)
-     (0 0 0 0 0 0 0)
-"""
-
-
 graph = {
-    'A': ['C', 'D', 'E'],
+    'A': ['C', 'D', 'F'],
     'B': ['C', 'D'],
     'C': ['A', 'B', 'F'],
-    'D': ['A', 'B', 'E'],
-    'E': ['A', 'F'],
+    'D': ['A', 'B', 'F'],
+    'E': ['F'],
     'F': ['A', 'C', 'D', 'E'],
     'G': []
 }
@@ -31,5 +19,31 @@ def VoisinsSommet(graphe, sommet):
         return []
     return graphe[sommet]
 
+def ParcoursLargeur(graphe, sommet):
+    visites = []
+    file = [sommet]
+
+    while file:
+        actuel = file.pop(0)
+        if actuel not in visites:
+            visites.append(actuel)
+            file.extend([voisin for voisin in graphe.get(actuel, []) if voisin not in visites])
+    
+    return visites
+
+def ParcoursProfondeur(graphe, sommet):
+    visites = []
+    pile = [sommet]
+
+    while pile:
+        actuel = pile.pop()
+        if actuel not in visites:
+            visites.append(actuel)
+            pile.extend([voisin for voisin in graphe.get(actuel, []) if voisin not in visites])
+    
+    return visites
+
 print(DegresSommet(graph, 'A'))  # Retourne 3
-print(VoisinsSommet(graph, 'A'))  # Retourne ['C', 'D', 'E']
+print(VoisinsSommet(graph, 'A'))  # Retourne ['C', 'D', 'F']
+print(ParcoursLargeur(graph, 'A'))  # Retourne un ordre de visite en largeur à partir de 'A'
+print(ParcoursProfondeur(graph, 'A'))  # Retourne un ordre de visite en profondeur à partir de 'A'
