@@ -1,7 +1,7 @@
-# Construction d'un graphe d'intervalles à partir des CSV du dossier task_interval
-import os
 import csv
 import random
+import matplotlib.pyplot as plt
+import networkx as nx
 
 def construire_graphe_intervalles_csv(fichier_csv):
 	"""
@@ -36,7 +36,7 @@ def construire_graphe_intervalles_csv(fichier_csv):
 			if a_fin >= b_debut and b_fin >= a_debut:
 				graphe[a_id].append(b_id)
 				graphe[b_id].append(a_id)
-	return graphe
+	return graphe, intervalles
 
 
 def ordre_elimination_parfait_mcs(graphe):
@@ -97,8 +97,8 @@ def colorer_graphe_peo(graphe, peo):
 	return couleurs_taches, nb_serveurs
 
 
-fichier = 'dataset/task_interval/task_intervals_1.csv'
-graphe = construire_graphe_intervalles_csv(fichier)
+fichier = 'dataset/task_interval/task_intervals_30.csv'
+graphe, intervalles = construire_graphe_intervalles_csv(fichier)
 print(graphe)
 
 peo = ordre_elimination_parfait_mcs(graphe)
@@ -107,3 +107,28 @@ print("Ordre d'élimination parfait (PEO) :", peo)
 couleurs_taches, nb_serveurs = colorer_graphe_peo(graphe, peo)
 print("Assignation des serveurs :", couleurs_taches)
 print("Nombre minimum de serveurs nécessaires :", nb_serveurs)
+
+# Visualisation du graphe
+plt.figure(figsize=(12, 12))  # Taille plus grande pour plus de lisibilité
+G = nx.Graph(graphe)
+# Utiliser un layout circulaire pour mieux répartir les nœuds
+pos = nx.circular_layout(G)
+node_colors = [couleurs_taches.get(node, 1) for node in G.nodes()]
+nx.draw(G, pos, with_labels=True, node_color=node_colors, cmap='tab20', node_size=800, font_size=8, font_weight='bold', edge_color='gray')
+plt.title("Graphe d'intervalles coloré (couleurs = serveurs)", fontsize=14)
+plt.axis('off')  # Supprimer les axes pour plus de propreté
+plt.show()
+
+# Visualisation des intervalles
+fig, ax = plt.subplots(figsize=(10, 8))
+intervalles.sort(key=lambda x: x[0])  # Trier par début
+y_positions = range(len(intervalles))
+for i, (debut, fin, tache) in enumerate(intervalles):
+    ax.plot([debut, fin], [i, i], 'o-', linewidth=2, markersize=6, label=tache)
+ax.set_yticks(y_positions)
+ax.set_yticklabels([t[2] for t in intervalles])
+ax.set_xlabel('Temps')
+ax.set_title('Intervalles des tâches (chevauchements)')
+ax.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
