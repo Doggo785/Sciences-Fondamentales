@@ -110,18 +110,33 @@ def taille_clique_max(graphe):
 
 fichier = 'dataset/task_interval/task_intervals_30.csv'
 graphe, intervalles = construire_graphe_intervalles_csv(fichier)
-print(graphe)
+
+print("Analyse des Intervalles et Graphe")
+print("=" * 50)
+print(f"Fichier analysé : {fichier}")
+print(f"Nombre de tâches : {len(graphe)}")
+print(f"Nombre d'arêtes dans le graphe : {sum(len(v) for v in graphe.values()) // 2}")
+print()
 
 peo = ordre_elimination_parfait_mcs(graphe)
-print("Ordre d'élimination parfait (PEO) :", peo)
+print("Ordre d'Élimination Parfait (PEO) :")
+print(" -> ".join(peo))
+print()
 
 couleurs_taches, nb_serveurs = colorer_graphe_peo(graphe, peo)
-print("Assignation des serveurs :", couleurs_taches)
-print("Nombre minimum de serveurs nécessaires :", nb_serveurs)
+print("🖥️  Assignation des Serveurs :")
+for tache, serveur in sorted(couleurs_taches.items(), key=lambda x: int(x[0][1:]) if x[0][1:].isdigit() else 0):
+    print(f"   {tache} -> Serveur {serveur}")
+print()
 
 taille_clique = taille_clique_max(graphe)
-print("La taille de la clique maximale est :", taille_clique)
-print("Elle est égale au nombre minimum de serveurs nécessaires :", nb_serveurs == taille_clique)
+print("Propriété des Graphes d'Intervalles :")
+print(f"   Nombre minimum de serveurs (χ(G)) : {nb_serveurs}")
+print(f"   Taille de la clique maximale (ω(G)) : {taille_clique}")
+print(f"   Égalité χ(G) = ω(G) : {'Vrai' if nb_serveurs == taille_clique else 'Faux'}")
+print()
+
+print("Analyse terminée ! Les visualisations s'ouvrent maintenant...")
 
 # Visualisation du graphe
 plt.figure(figsize=(12, 12))  # Taille plus grande pour plus de lisibilité
