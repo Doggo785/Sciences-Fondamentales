@@ -124,7 +124,7 @@ print(" -> ".join(peo))
 print()
 
 couleurs_taches, nb_serveurs = colorer_graphe_peo(graphe, peo)
-print("🖥️  Assignation des Serveurs :")
+print("Assignation des Serveurs :")
 for tache, serveur in sorted(couleurs_taches.items(), key=lambda x: int(x[0][1:]) if x[0][1:].isdigit() else 0):
     print(f"   {tache} -> Serveur {serveur}")
 print()
