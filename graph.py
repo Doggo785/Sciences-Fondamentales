@@ -97,6 +97,17 @@ def colorer_graphe_peo(graphe, peo):
 	return couleurs_taches, nb_serveurs
 
 
+def taille_clique_max(graphe):
+	"""
+	Calcule la taille de la clique maximale dans le graphe.
+	Pour les graphes d'intervalles, cela correspond au nombre minimum de serveurs nécessaires.
+	"""
+	G = nx.Graph(graphe)
+	cliques = list(nx.find_cliques(G))
+	taille_max = max(len(c) for c in cliques) if cliques else 0
+	return taille_max
+
+
 fichier = 'dataset/task_interval/task_intervals_30.csv'
 graphe, intervalles = construire_graphe_intervalles_csv(fichier)
 print(graphe)
@@ -107,6 +118,10 @@ print("Ordre d'élimination parfait (PEO) :", peo)
 couleurs_taches, nb_serveurs = colorer_graphe_peo(graphe, peo)
 print("Assignation des serveurs :", couleurs_taches)
 print("Nombre minimum de serveurs nécessaires :", nb_serveurs)
+
+taille_clique = taille_clique_max(graphe)
+print("La taille de la clique maximale est :", taille_clique)
+print("Elle est égale au nombre minimum de serveurs nécessaires :", nb_serveurs == taille_clique)
 
 # Visualisation du graphe
 plt.figure(figsize=(12, 12))  # Taille plus grande pour plus de lisibilité
